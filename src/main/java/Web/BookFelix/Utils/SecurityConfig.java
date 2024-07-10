@@ -53,7 +53,7 @@ public class SecurityConfig {
                                 "/oauth/**", "/register", "/error","/registerSubmit","/books")
                         .permitAll()
                         .requestMatchers("/books/edit/**",
-                                "/books/add", "/books/delete","/Admin")
+                                "/books/add", "/books/delete","/Admincategory","/Adminbook")
                         .hasAnyAuthority("ADMIN")
                         .requestMatchers("/books", "/cart", "/cart/**")
                         .hasAnyAuthority("USER")

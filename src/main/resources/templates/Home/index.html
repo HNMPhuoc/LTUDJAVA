@@ -8,16 +8,17 @@
   <th:block th:replace="~{layout::link-css}"></th:block>
   <th:block th:replace="~{layout::custom-css}"></th:block>
 </head>
-<body>
+<body class="d-flex flex-column vh-100">
 <th:block th:replace="~{layout::header}"></th:block>
-<div class="container">
-  <nav class="navbar navbar-light bg-light">
+<div class="container content">
+  <div class="navbar-custom">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        TRANG CHỦ ỨNG DỤNG QUẢN LÝ SÁCH - KẾT NỐI CSDL MYSQL
-      </a>
+                <h1 class="navbar-brand-custom">
+                    TRANG CHỦ ỨNG DỤNG QUẢN LÝ SÁCH - BookFelix
+                </h1>
     </div>
-  </nav>
+  </div>
+  <!-- Nội dung của bạn sẽ nằm ở đây -->
 </div>
 <th:block th:replace="~{layout::footer}"></th:block>
 </body>

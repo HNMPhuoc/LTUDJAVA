@@ -28,7 +28,7 @@ public class BookController {
     public String showAllBooks(@NotNull Model model,
                                @RequestParam(defaultValue = "0")
                                Integer pageNo,
-                               @RequestParam(defaultValue = "1")
+                               @RequestParam(defaultValue = "5")
                                Integer pageSize,
                                @RequestParam(defaultValue = "id")
                                String sortBy) {
@@ -36,7 +36,7 @@ public class BookController {
                 pageSize, sortBy));
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages",
-                bookService.getAllBooks(pageNo, pageSize, sortBy).size() / pageSize);
+                bookService.getAllBooks(pageNo, pageSize, sortBy).size() / pageSize + 1);
         model.addAttribute("categories",
                 categoryService.getAllCategories());
         return "book/list";

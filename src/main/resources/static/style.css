@@ -9,3 +9,53 @@ nav{
     bottom: 0;
     width: 100%;
 }
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.nav-item {
+    margin-left: 15px;
+}
+
+.navbar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    color: #ff1744;
+}
+.content {
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
+    margin-top: 0;
+}
+
+.content p {
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 960p;
+    margin: 0 auto;
+    min-height: 400px;
+}
+.navbar-custom {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.navbar-brand-custom {
+    font-weight: bold;
+    color: #1a237e;
+    text-align: center;
+    display: block;
+    font-size: 1.5rem;
+}
