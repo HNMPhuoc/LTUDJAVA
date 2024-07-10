@@ -7,10 +7,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -79,21 +83,30 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/")
                         .failureUrl("/login?error")
                         .permitAll()
-                ).oauth2Login(
-                        oauth2Login -> oauth2Login
-                                .loginPage("/login")
-                                .failureUrl("/login?error")
-                                .userInfoEndpoint(userInfoEndpoint ->
-                                        userInfoEndpoint
-                                                .userService(oAuthService)
-                                )
-                                .successHandler((request, response, authentication) -> {
-                                    var oidcUser = (DefaultOidcUser) authentication.getPrincipal();
-                                    userService.saveOauthUser(oidcUser.getEmail(), oidcUser.getFullName(), Provider.GOOGLE.toString());
-                                    response.sendRedirect("/");
-                                })
+                ).oauth2Login(oauth2Login -> oauth2Login
+                        .loginPage("/login")
+                        .failureUrl("/login?error")
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(oAuthService))
+                        .successHandler((request, response, authentication) -> {
+                            var oidcUser = (DefaultOidcUser) authentication.getPrincipal();
+                            String email = oidcUser.getEmail();
+                            String name = oidcUser.getFullName();
+                            String provider = Provider.GOOGLE.toString();
 
-                                .permitAll()
+                            // Lưu thông tin người dùng vào cơ sở dữ liệu
+                            userService.saveOauthUser(email, name, provider);
+
+                            // Tải lại thông tin người dùng cập nhật
+                            UserDetails userDetails = userService.loadUserByEmail(email);
+
+                            // Cập nhật đối tượng xác thực với thông tin và quyền mới nhất
+                            Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                            SecurityContextHolder.getContext().setAuthentication(auth);
+
+                            // Chuyển hướng về trang chủ
+                            response.sendRedirect("/");
+                        })
+                        .permitAll()
                 ).rememberMe(rememberMe -> rememberMe
                         .key("hutech")
                         .rememberMeCookieName("hutech")

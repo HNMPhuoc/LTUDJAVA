@@ -67,7 +67,21 @@ public class UserService implements UserDetailsService {
                 .disabled(false)
                 .build();
     }
-
+    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+        var user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getUsername())
+                .password(user.getPassword())
+                .authorities(user.getAuthorities())
+                .accountExpired(false)
+                .accountLocked(false)
+                .credentialsExpired(false)
+                .disabled(false)
+                .build();
+    }
     @Transactional
     public void saveOauthUser(String email, String name, String provider) {
         User existingUser = userRepository.findByEmail(email);
